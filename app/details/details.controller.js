@@ -1,16 +1,15 @@
 (function () {
   angular.module("media-app").controller("detailsController", 
-    function detailsController($scope, mediaService, $location) {
+    function detailsController($scope, mediaService, $location, $routeParams) {
         var vm = this;
         vm.newTag = '';
-        console.log('details')
-        vm.media = mediaService.getMediaById(1);
-        if (!vm.media) {
-            $location.path('home');
-        }
-        console.log(mediaService.selectedMedia);
-        console.log(vm.media);
+        vm.alert = null;
 
+        mediaService.getMediaById($routeParams.id).then((response) => {
+            vm.media = response.data;
+        }, (err) => {
+            console.log(err);
+        })
 
         vm.removeTag = function(tag) {
             vm.media.tags.splice(vm.media.tags.indexOf(tag), 1);
@@ -24,7 +23,11 @@
         }
 
         vm.save = function() {
-            console.log(mediaService.getAllMedia()[mediaService.getAllMedia().indexOf(vm.media)]);
+            mediaService.updateMedia(vm.media.id, vm.media).then((response) => {
+                vm.alert = {type:'success', message:'Successfully saved'};
+            }, (err) => {
+                vm.alert = {type:'danger', message:'Error while updating media :' + err};
+            });
         }
     });
 })();

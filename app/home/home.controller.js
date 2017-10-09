@@ -9,21 +9,8 @@
       vm.filterVideo = false;
       vm.filteredmedia = [];
       vm.nbItemPerPage = 4;
+      vm.fullMedia = [];
 
-
-      /*
-      mediaService.getAllMedia().query(function (result) {
-        vm.fullMedia = shuffle(result);
-        vm.filterMedia();
-      });
-
-      mediaService.getMediaById().query({ id: '00001' }, function (result) {
-        console.log(result);
-      })
-      
-      vm.filteredmedia = vm.fullMedia;
-
-      */
       vm.range = function (nb) {
         return range(nb);
       }
@@ -47,6 +34,7 @@
       }
 
       vm.filterMedia = function () {
+        console.log('Filtering', vm.fullMedia);
         vm.filteredmedia = [];
         let tags = vm.filterTag.split(' ');
         tags = tags.filter(function (n) { return n.length != 0 })
@@ -91,11 +79,17 @@
       }
 
       vm.showDetails = function(media) {
-        mediaService.setSelectedMedia(media);
-        $location.path('/media/1')
+        $location.path('/media/' + media.id)
       }
 
-      vm.fullMedia = mediaService.getAllMedia();
-      vm.filterMedia();
+
+
+      mediaService.getAllMedia().then((response) => {
+        vm.fullMedia = response.data;
+        vm.filterMedia();
+      },
+      (err) => {
+        console.log(err);
+      });
     });
 })();

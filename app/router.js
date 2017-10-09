@@ -6,9 +6,6 @@ angular.module("media-app").config(function($routeProvider) {
             controller: "homeController",
             controllerAs: 'vm',
             resolve: {
-                function(mediaService) {
-                    mediaService.initMedia();
-                }
             } 
         })
         .when("/media/:id", {

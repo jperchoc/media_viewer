@@ -1,18 +1,47 @@
-<div class="row">
-    <form>
-        <input type="checkbox" class="form-check-input" ng-model="vm.filterVideo" ng-change="vm.filterMedia()"> Videos
-        <input type="checkbox" class="form-check-input" ng-model="vm.filterPhoto" ng-change="vm.filterMedia()"> Photos
-        <input type="checkbox" class="form-check-input" ng-model="vm.filterGif" ng-change="vm.filterMedia()"> Gif
+<!-- form -->
+<form>
+    <div class="form-group">
+        <label for="exampleInputPassword1">Tag</label>
         <input class="form-control" type="text" placeholder="tag" ng-model="vm.filterTag" ng-change="vm.filterMedia()"/>
-        <div class="form-group">
-            <input type="range" min="1" max="20" ng-model="vm.nbItemPerPage" ng-change="vm.updateItemPerPage()"> 
-            {{vm.nbItemPerPage}} items/page
+    </div>
+    <div class="form-group">
+        <input type="range" min="1" max="20" ng-model="vm.nbItemPerPage" ng-change="vm.updateItemPerPage()"> 
+        {{vm.nbItemPerPage}} items/page
+    </div>
+    <div class="form-check">
+            <label class="form-check-label">
+                <input type="checkbox" class="form-check-input" ng-model="vm.filterVideo" ng-change="vm.filterMedia()">
+                Videos
+            </label>
         </div>
-    </form>
+    <div class="form-check">
+            <label class="form-check-label">
+                <input type="checkbox" class="form-check-input" ng-model="vm.filterPhoto" ng-change="vm.filterMedia()">
+                Photos
+            </label>
+        </div>
+    <div class="form-check">
+        <label class="form-check-label">
+            <input type="checkbox" class="form-check-input" ng-model="vm.filterGif" ng-change="vm.filterMedia()">
+            Gif
+        </label>
+    </div>
+</form>
+<div class="row">
+    
 </div>
-<div class="row pagination">
-    <button class="btn" ng-repeat="n in vm.range(vm.nbPage) track by $index" ng-class="{'btn-primary': $index===vm.page}" ng-click="vm.setPage($index)">{{$index + 1}}</button>
-</div>
+<!-- pagination -->
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <li class="page-item" ng-class="{'disabled': vm.page === 0}"><a class="page-link" href="" ng-click="vm.setPage(vm.page - 1)">Previous</a></li>
+        <li class="page-item" ng-repeat="n in vm.range(vm.nbPage) track by $index" ng-class="{'active': $index===vm.page}">
+            <a class="page-link" href="" ng-click="vm.setPage($index)">{{$index + 1}}</a>
+        </li>
+        <li class="page-item" ng-class="{'disabled': vm.page === vm.nbPage-1}"><a class="page-link" href="" ng-click="vm.setPage(vm.page + 1)">Next</a></li>
+    </ul>
+</nav>
+
+<!-- medias -->
 <div class="row">
     <div class="medias" ng-if="vm.media.length !== 0">
         <div class="media" ng-repeat="media in vm.media">
@@ -21,7 +50,7 @@
             <video  ng-click="vm.showDetails(media)" ng-if="media.type === 'VIDEO'" class="img-fluid img-thumbnail img-max" controls>
                 <source ng-src="{{media.path}}">
             </video>
-            <span class="label label-primary tag" ng-repeat="tag in media.tags" ng-click="vm.addFilterTag(tag)">{{tag}}</span>            
+            <span class="badge badge-primary tag" ng-repeat="tag in media.tags" ng-click="vm.addFilterTag(tag)">{{tag}}</span>            
         </div>
     </div>
 </div>

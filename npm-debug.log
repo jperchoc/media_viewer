@@ -1,0 +1,19 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/node', '/usr/bin/npm', 'start' ]
+2 info using npm@2.15.11
+3 info using node@v0.12.18
+4 verbose node symlink /usr/bin/node
+5 verbose stack Error: ENOENT, open '/home/Jonathan.Perchoc/js/ImgWeb/package.json'
+5 verbose stack     at Error (native)
+6 verbose cwd /home/Jonathan.Perchoc/js/ImgWeb
+7 error Linux 4.4.0-78-generic
+8 error argv "/usr/bin/node" "/usr/bin/npm" "start"
+9 error node v0.12.18
+10 error npm  v2.15.11
+11 error path /home/Jonathan.Perchoc/js/ImgWeb/package.json
+12 error code ENOENT
+13 error errno -2
+14 error enoent ENOENT, open '/home/Jonathan.Perchoc/js/ImgWeb/package.json'
+14 error enoent This is most likely not a problem with npm itself
+14 error enoent and is related to npm not being able to find a file.
+15 verbose exit [ -2, true ]

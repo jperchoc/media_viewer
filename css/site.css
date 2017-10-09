@@ -1,8 +1,8 @@
 .tag {margin-right:2px;}
 .img-max {max-height: 300px; max-width: 280px;display: inline-block}
 .medias { padding:5px; background-color:  #eee}
-.media {display: inline-block; text-align: center; width: 280px; }
-.media-details { text-align: center; background-color:  #ddd; padding: 5px;}
+.media {display: inline-block; text-align: center; width: 280px; vertical-align: middle;}
+.media-details { text-align: center; background-color:  #ddd; padding: 5px; margin: auto; width: 100%; }
 .pagination {text-align: center;}
 .pagination btn {display: inline-block; margin: 2px;}
 
@@ -23,5 +23,13 @@ a.supress-tag {color:  #e2babd; font-size: 1.1em}
     margin-top: -30px;
     }
 
-
+    input[type='range']::-moz-focus-outer { border: 0; }
     
+.details-form {padding: 1.5rem;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    border-width: .2rem;
+    border:solid 1px #ddd;
+}
+

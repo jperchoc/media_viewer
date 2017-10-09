@@ -5,37 +5,32 @@
     
     function mediaService($resource, $http, $q) {
         var JSONFILE = 'mock.json';
+        var APIURL = "http://localhost:3005/"
         this.media = [];
         this.selectedMedia = null;
 
         return {
-            initMedia:initMedia,
             getAllMedia:getAllMedia,
             getMediaById:getMediaById,
-            setSelectedMedia:setSelectedMedia
+            updateMedia:updateMedia,
+            deleteMedia:deleteMedia
         }
 
-        function initMedia() {
-            $resource('./app/mediaService/' + JSONFILE).query(function (result) {
-                mediaService.media = result;
-                console.log('media initialized')
-            });
-        }
         function getAllMedia() {
-            return mediaService.media;//$resource('./app/mediaService/media.json');
+            return $http.get(APIURL+'medias');
         }
 
         function getMediaById(id) {
-            //temp
-            return mediaService.selectedMedia; //$resource('./app/mediaService/media.json', {id: '@id'});
+            return $http.get(APIURL+'medias/'+id)
         }
 
-        function updateMediaById(id) {
-
+        function updateMedia(id, media) {
+            console.log('updating media', media)
+            return $http.put(APIURL+'medias/'+id, media, {})
         }
 
-        function setSelectedMedia(media) {
-            mediaService.selectedMedia = media;
+        function deleteMedia(id) {
+            return $http.delete(APIURL+'medias/'+id)
         }
     }
 
