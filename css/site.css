@@ -1,0 +1,27 @@
+.tag {margin-right:2px;}
+.img-max {max-height: 300px; max-width: 280px;display: inline-block}
+.medias { padding:5px; background-color:  #eee}
+.media {display: inline-block; text-align: center; width: 280px; }
+.media-details { text-align: center; background-color:  #ddd; padding: 5px;}
+.pagination {text-align: center;}
+.pagination btn {display: inline-block; margin: 2px;}
+
+input[type="range"] {
+    width: 80%;
+    display: inline-block;
+    vertical-align: middle;
+}
+.label {cursor: pointer;}
+
+a.supress-tag {color:  #e2babd; font-size: 1.1em}
+
+.bottom-media {    
+    background-color: rgba(0, 0, 0, 0.83);
+    padding: 5px;
+    width: 280px;
+    position: absolute;
+    margin-top: -30px;
+    }
+
+
+    

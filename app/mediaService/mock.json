@@ -1,0 +1,35 @@
+[
+    {
+        "id": "00001",            
+        "path": "mock/01.jpg",         
+        "type": "PHOTO",           
+        "tags": [
+            "wave",
+            "blue"
+        ],
+        "libelle": "01",
+        "rating": 9 
+    },
+    {
+        "id": "00002",            
+        "path": "mock/02.jpg",         
+        "type": "PHOTO",           
+        "tags": [
+            "night",
+            "stars"
+        ],
+        "libelle": "01",
+        "rating": 9 
+    },
+    {
+        "id": "00003",            
+        "path": "mock/03.jpg",         
+        "type": "PHOTO",           
+        "tags": [
+            "night",
+            "purple"
+        ],
+        "libelle": "03",
+        "rating": 9 
+    }
+]
