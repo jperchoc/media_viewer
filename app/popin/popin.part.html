@@ -1,0 +1,49 @@
+<div id="detailsPopin" class="popin-modal modal fade show" style="display: block;" ng-hide="!vm.show" ng-click="vm.show=false" tabindex="1" ng-keypress="vm.keyPressed($event)" >
+  <div class="modal-dialog" role="document" ng-click="$event.stopPropagation();">
+    <div class="modal-content">
+      <div class="modal-header">
+          <div class="container-fluid">
+            <div class=row>
+              <div class="col">
+                <button type="button" class="btn btn-primary" ng-click="vm.callbackPrevious()">Previous</button>
+              </div>
+              <div class="col-6" style="text-align:center">
+                <h5 class="modal-title">{{vm.media.libelle}}</h5>
+              </div>
+              <div class="col">
+                <button type="button" class="btn btn-primary" ng-click="vm.callbackNext()">Next</button>
+              </div>
+            </div>
+          </div>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="vm.show = false;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <img ng-if="vm.media.type === 'PHOTO' || vm.media.type === 'GIF'" ng-src="{{vm.media.path}}" class="img-fluid img-thumbnail">
+        <video ng-if="vm.media.type === 'VIDEO'" width=500px controls>
+            <source ng-src="{{vm.media.path}}">
+        </video>
+        <form>
+          <span class="badge badge-primary tag" ng-repeat="tag in vm.media.tags">{{tag}} <a class="supress-tag" ng-click="vm.removeTag(tag)">X</a></span>
+          <input type="text" class="form-control" placeholder="Add Tag" ng-model="vm.newTag" 
+                ng-keyup="$event.keyCode == 13 ? vm.addTag() : return"/>
+          <input-stars 
+            max="10" 
+            icon-base="fa fa-fw"
+            icon-empty="fa-star-o"
+            icon-half="fa-star-half-o"
+            icon-full="fa-star" 
+            icon-hover-full="fa-star" 
+            ng-model="vm.media.ratings"
+            ng-change="vm.save()"></input-stars> {{vm.media.ratings}}
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" ng-click="vm.delete()">Delete</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="vm.show = false;">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop fade show" ng-if="vm.show"></div>
