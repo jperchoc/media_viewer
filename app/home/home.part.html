@@ -1,28 +1,23 @@
 <!-- form -->
-<form>
+<form class="search-form">
     <div class="form-group">
-        <label for="exampleInputPassword1">Tag</label>
-        <input class="form-control" type="text" placeholder="tag" ng-model="vm.filterTag" ng-change="vm.filterMedia()"/>
+        <input class="form-control" type="text" placeholder="tag1, tag2, ..." ng-model="vm.tags" ng-change="vm.executeQuery()" ng-model-options="{debounce: 750}">
     </div>
-    <div class="form-group">
-        <input type="range" min="1" max="20" ng-model="vm.nbItemPerPage" ng-change="vm.updateItemPerPage()"> 
-        {{vm.nbItemPerPage}} items/page
-    </div>
-    <div class="form-check">
+    <div class="form-check form-check-inline">
             <label class="form-check-label">
-                <input type="checkbox" class="form-check-input" ng-model="vm.filterVideo" ng-change="vm.filterMedia()">
+                <input type="checkbox" class="form-check-input" ng-model="vm.filterVideo" ng-change="vm.executeQuery()">
                 Videos
             </label>
         </div>
-    <div class="form-check">
+    <div class="form-check form-check-inline">
             <label class="form-check-label">
-                <input type="checkbox" class="form-check-input" ng-model="vm.filterPhoto" ng-change="vm.filterMedia()">
+                <input type="checkbox" class="form-check-input" ng-model="vm.filterPhoto" ng-change="vm.executeQuery()">
                 Photos
             </label>
         </div>
-    <div class="form-check">
+    <div class="form-check form-check-inline">
         <label class="form-check-label">
-            <input type="checkbox" class="form-check-input" ng-model="vm.filterGif" ng-change="vm.filterMedia()">
+            <input type="checkbox" class="form-check-input" ng-model="vm.filterGif" ng-change="vm.executeQuery()">
             Gif
         </label>
     </div>
@@ -31,26 +26,41 @@
     
 </div>
 <!-- pagination -->
-<nav aria-label="Page navigation example">
-    <ul class="pagination">
-        <li class="page-item" ng-class="{'disabled': vm.page === 0}"><a class="page-link" href="" ng-click="vm.setPage(vm.page - 1)">Previous</a></li>
-        <li class="page-item" ng-repeat="n in vm.range(vm.nbPage) track by $index" ng-class="{'active': $index===vm.page}">
-            <a class="page-link" href="" ng-click="vm.setPage($index)">{{$index + 1}}</a>
+<div class="text-xs-center text-center">
+    <ul class="pagination d-inline-flex" ng-if="vm.pager.pages.length">
+        <li class="page-item" ng-class="{disabled:vm.pager.currentPage === 1}">
+            <a class="page-link" href="" ng-click="vm.setPage(1)">First</a>
         </li>
-        <li class="page-item" ng-class="{'disabled': vm.page === vm.nbPage-1}"><a class="page-link" href="" ng-click="vm.setPage(vm.page + 1)">Next</a></li>
+        <li class="page-item" ng-class="{disabled:vm.pager.currentPage === 1}">
+            <a class="page-link" href="" ng-click="vm.setPage(vm.pager.currentPage - 1)">Previous</a>
+        </li>
+        <li class="page-item"  ng-repeat="page in vm.pager.pages" ng-class="{active:vm.pager.currentPage === page}">
+            <a class="page-link" href="" ng-click="vm.setPage(page)">{{page}}</a>
+        </li>               
+        <li class="page-item" ng-class="{disabled:vm.pager.currentPage === vm.pager.totalPages}">
+            <a class="page-link" href="" ng-click="vm.setPage(vm.pager.currentPage + 1)">Next</a>
+        </li>
+        <li class="page-item" ng-class="{disabled:vm.pager.currentPage === vm.pager.totalPages}">
+            <a class="page-link" href="" ng-click="vm.setPage(vm.pager.totalPages)">Last</a>
+        </li>
     </ul>
-</nav>
+</div>
 
 <!-- medias -->
 <div class="row">
     <div class="medias" ng-if="vm.media.length !== 0">
-        <div class="media" ng-repeat="media in vm.media">
+        <div class="media" ng-repeat="media in vm.media" ng-class="{'selected-media' : media === vm.selectedMedia && vm.showModal}">
             <!--<h3>{{media.libelle}}</h3>-->
-            <img  ng-click="vm.showDetails(media)" ng-if="media.type === 'PHOTO' || media.type === 'GIF'" ng-src="{{media.path}}" class="img-fluid img-thumbnail img-max">
-            <video  ng-click="vm.showDetails(media)" ng-if="media.type === 'VIDEO'" class="img-fluid img-thumbnail img-max" controls>
-                <source ng-src="{{media.path}}">
+            <img  ng-click="vm.showDetails(media)" ng-if="media.type === 'PHOTO' || media.type === 'GIF'" ng-src="{{vm.encodeURIComponent(media.path)}}" class="img-fluid img-thumbnail img-max">
+            <video  ng-click="vm.showDetails(media)" ng-if="media.type === 'VIDEO'" class="img-fluid img-thumbnail img-max" controls preload="none">
+                <source ng-src="{{vm.encodeURIComponent(media.path)}}">
             </video>
             <span class="badge badge-primary tag" ng-repeat="tag in media.tags" ng-click="vm.addFilterTag(tag)">{{tag}}</span>            
         </div>
     </div>
 </div>
+<popin-media media="vm.selectedMedia" show="vm.showModal" callback-next="vm.getNext()" callback-previous="vm.getPrevious()"></popin-media>
+
+<div class="alert alert-warning" ng-if="vm.media.length === 0 && vm.isLoaded">No media found.</div>
+
+

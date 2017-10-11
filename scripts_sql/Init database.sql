@@ -3,9 +3,9 @@ USE media_app;
 
 CREATE TABLE `medias` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `path` varchar(400) NOT NULL,
+  `path` varchar(400) NOT NULL UNIQUE,
   `type` varchar(5) NOT NULL,
-  `libelle` varchar(200) NOT NULL,
+  `libelle` varchar(200) NOT NULL ,
   `ratings` int(2) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

@@ -7,10 +7,12 @@
 
     <!-- Bootstrap CSS -->
     <!-- <link rel="stylesheet" href="css/bootstrap.min.css"> -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/site.css">
+    <link rel="stylesheet" href="css/angular-input-stars.css">
   </head>
-  <body ng-app="media-app">
+  <body ng-app="media-app" ng-cloak>
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand" href="#">Navbar</a>
@@ -43,12 +45,14 @@
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <!--<script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>-->
-
+    
 
     <script src="js/angular.min.js"></script>
     <script src="js/angular-resource.min.js"></script>
     <script src="js/angular-route.min.js"></script>
     <script src="js/angular-sanitize.min.js"></script>
+    <script src="js/underscore.min.js"></script>
+    <script src="js/angular-input-stars.js"></script>
     <!--<script src="js/videogular/videogular.js"></script>
     <script src="js/videogular-controls/vg-controls.js"></script>
     <script src="js/videogular-overlay-play/vg-overlay-play.js"></script>
@@ -60,7 +64,11 @@
     <script src="app/router.js"></script>
     <script src="app/tools.js"></script>
 
+    <script src="app/popin/popin.directive.js"></script>
+
+    <script src="app/pagination/pagination.service.js"></script>
     <script src="app/mediaService/media.service.js"></script>
+
     <script src="app/home/home.controller.js"></script>
     <script src="app/details/details.controller.js"></script>
 

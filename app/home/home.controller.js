@@ -1,95 +1,100 @@
 (function () {
   angular.module("media-app").controller("homeController",
-    function homeController($scope, mediaService, $location) {
+    function homeController($scope, mediaService, pagerService, $location, $document, $timeout) {
       var vm = this;
-      vm.title = "Title";
-      vm.filterTag = '';
       vm.filterPhoto = true;
       vm.filterGif = true;
       vm.filterVideo = false;
-      vm.filteredmedia = [];
-      vm.nbItemPerPage = 4;
-      vm.fullMedia = [];
-
-      vm.range = function (nb) {
-        return range(nb);
+      vm.nbItemPerPage = 10;
+      vm.nbPage = 0;
+      vm.pager = {};
+      vm.totalMedia = 0;
+      vm.tags = '';
+      vm.isLoaded = false;
+      vm.selectedMedia = {};
+      vm.showModal = false;
+      
+      vm.encodeURIComponent = function(str) {
+        return encodeURIComponent(str);
       }
-      vm.updateItemPerPage = function () {
-        vm.setPagination();
-        vm.getMediaPage();
-      }
-      vm.setPagination = function () {
-        vm.page = 0;
-        vm.nbPage = Math.ceil(vm.filteredmedia.length / vm.nbItemPerPage);
-      }
-      vm.getMediaPage = function () {
-        vm.media = [];
-        for (let i = vm.page * vm.nbItemPerPage; i < Math.min(vm.page * vm.nbItemPerPage + vm.nbItemPerPage, vm.filteredmedia.length); i++) {
-          vm.media.push(vm.filteredmedia[i]);
-        }
-      }
-      vm.setPage = function (index) {
-        vm.page = index;
-        vm.getMediaPage();
-      }
-
-      vm.filterMedia = function () {
-        console.log('Filtering', vm.fullMedia);
-        vm.filteredmedia = [];
-        let tags = vm.filterTag.split(' ');
-        tags = tags.filter(function (n) { return n.length != 0 })
-        for (let i = 0; i < vm.fullMedia.length; i++) {
-          let media = vm.fullMedia[i];
-          if (tags.length !== 0) {
-            for (let j = 0; j < media.tags.length; j++) {
-              let tag = media.tags[j];
-              for (let k = 0; k < tags.length; k++) {
-                if (tag.indexOf(tags[k]) !== -1) {
-                  vm.addMedia(media);
-                  break;
-                }
-              }
-            }
-          } else {
-            vm.addMedia(media);
+      vm.generateQuery = function() {
+        let query = '';
+        if (vm.tags.length !== 0) {
+          query += 'tags='
+          let tags = vm.tags.split(',')
+          for (let i = 0; i < tags.length; i++) {
+            query += (i !== tags.length - 1) ? tags[i].trim() + ',' : tags[i].trim();
           }
         }
-        vm.updateItemPerPage();
+        query += (query.length !== 0) ? '&type=':'type=';
+        if (vm.filterGif) query += 'gif';
+        if (vm.filterPhoto) query += (query[query.length -1] !== '=') ? ',photo' : 'photo';
+        if (vm.filterVideo) query += (query[query.length -1] !== '=') ? ',video' : 'video';
+        return query;
       }
 
+      vm.executeQuery = function(idx) {
+        vm.pager.currentPage = idx ? idx : 1;
+        let query = vm.generateQuery();
+        mediaService.getMedias(query, (vm.pager.currentPage-1) * vm.nbItemPerPage, vm.nbItemPerPage).then((response) => {
+          vm.media = response.data;
+          mediaService.getMediasCount(query).then((res) => {   
+            vm.nbPage = Math.ceil(res.data[0].nbMedias / vm.nbItemPerPage);
+            vm.totalMedia = res.data[0].nbMedias;
+            vm.pager = pagerService.GetPager(vm.totalMedia, vm.pager.currentPage, vm.nbItemPerPage);
+            vm.isLoaded = true;
 
-
-      vm.addMedia = function (media) {
-        if (vm.filteredmedia.indexOf(media) !== -1) return;
-        switch (media.type) {
-          case "PHOTO":
-            if (vm.filterPhoto) { vm.filteredmedia.push(media); } break;
-          case "VIDEO":
-            if (vm.filterVideo) { vm.filteredmedia.push(media); } break;
-          case "GIF":
-            if (vm.filterGif) { vm.filteredmedia.push(media); } break;
+            if (vm.showModal) {
+              vm.selectedMedia = vm.media[vm.sens * (vm.nbItemPerPage-1)];
+            }
+          });
+        });
+      }
+      
+      vm.setPage = function (index) {
+        vm.isLoaded = false;
+        if (index < 1 || index > vm.pager.totalPages) {
+          return;
         }
+        vm.executeQuery(index);
       }
 
       vm.addFilterTag = function (tag) {
-        if (vm.filterTag.length != 0)
-          vm.filterTag += ' ';
-        vm.filterTag += tag;
-        vm.filterMedia();
+        if(vm.tags.indexOf(tag) === -1) {
+          if (vm.tags.length != 0 ) vm.tags += ', ';
+          vm.tags += tag;
+          vm.executeQuery();
+        }
       }
 
       vm.showDetails = function(media) {
-        $location.path('/media/' + media.id)
+        vm.selectedMedia = media;
+        vm.showModal = true;
+        $timeout(() => {document.getElementById('detailsPopin').focus()}, 50);
+        
+      } 
+
+      vm.getNext = function() {
+        let index = vm.media.indexOf(vm.selectedMedia);
+        if (index != vm.media.length -1) {
+          vm.selectedMedia = vm.media[index + 1];
+        } else {
+          vm.sens = 0;
+          vm.setPage(vm.pager.currentPage + 1);
+        }
       }
 
+      vm.getPrevious = function() {
+        let index = vm.media.indexOf(vm.selectedMedia);
+        if (index != 0) {
+          vm.selectedMedia = vm.media[index - 1];
+        } else {
+          vm.sens = 1;
+          vm.setPage(vm.pager.currentPage - 1);
+        }
+      }
+      
+      vm.executeQuery();
 
-
-      mediaService.getAllMedia().then((response) => {
-        vm.fullMedia = response.data;
-        vm.filterMedia();
-      },
-      (err) => {
-        console.log(err);
-      });
     });
 })();

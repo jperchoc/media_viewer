@@ -4,20 +4,24 @@
     mediaService.$inject = ['$resource','$http','$q']
     
     function mediaService($resource, $http, $q) {
-        var JSONFILE = 'mock.json';
-        var APIURL = "http://localhost:3005/"
-        this.media = [];
-        this.selectedMedia = null;
+
+        var APIURL = "http://localhost:3000/"
 
         return {
-            getAllMedia:getAllMedia,
+            getMediasCount:getMediasCount,
+            getMedias:getMedias,
             getMediaById:getMediaById,
             updateMedia:updateMedia,
             deleteMedia:deleteMedia
         }
 
-        function getAllMedia() {
-            return $http.get(APIURL+'medias');
+        function getMedias(query, offset, limit) {
+            if (query.length === 0) query = 'noquery';
+            return $http.get(APIURL+'medias/query/'+query+'?offset='+offset+'&limit='+limit);
+        }
+        function getMediasCount(query, offset, limit) {
+            if (query.length === 0) query = 'noquery';
+            return $http.get(APIURL+'medias/query/'+query+'/count');
         }
 
         function getMediaById(id) {

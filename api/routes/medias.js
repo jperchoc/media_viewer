@@ -3,27 +3,37 @@ var router = express.Router();
 var Media = require('../models/Media')
 
 /* GET home page. */
-router.get('/medias/:id?', function (req, res, next) {
-  if (req.params.id) {
+router.get('/medias/:id', function (req, res, next) {
     Media.getMediaById(req.params.id, function (err, rows) {
       if (err) {
         res.json(err);
       }
       else {
-        res.json(Media.mapMediaAndTags(rows));
+        res.json(Media.mapMediaAndTags(rows)[0]);
       }
     });
-  }
-  else {
-    Media.getAllMedias(function (err, rows) {
-      if (err) {
-        res.json(err);
-      }
-      else {
-        res.json(Media.mapMediaAndTags(rows));
-      }
-    });
-  }
+  });
+router.get('/medias/query/:query', function (req, res, next) {
+  let limit = req.query.limit ? req.query.limit : 20;
+  let offset = req.query.offset ? req.query.offset : 0;
+  Media.getMedias(req.params.query, limit, offset, function (err, rows) {
+    if (err) {
+      res.json(err);
+    }
+    else {
+      res.json(Media.mapMediaAndTags(rows));
+    }
+  });
+});
+router.get('/medias/query/:query/count', function (req, res, next) {
+  Media.getMediasCount(req.params.query, function (err, rows) {
+    if (err) {
+      res.json(err);
+    }
+    else {
+      res.json(rows);
+    }
+  });
 });
 router.post('/medias', function(req, res, next) {
   Media.addMedia(req.body, function (err, count) {

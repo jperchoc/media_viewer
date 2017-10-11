@@ -25,9 +25,9 @@
         </div>
     </div>
     <div class="row">
-        <div class="alert" ng-class="{'alert-success' : vm.alert.type === 'success', 'alert-danger' : vm.alert.type === 'danger'}" ng-if="vm.alert.message">
+        <div class="alert alert-dismissible fade show" ng-class="{'alert-success' : vm.alert.type === 'success', 'alert-danger' : vm.alert.type === 'danger'}" ng-if="vm.alert.message" role="alert">
             {{vm.alert.message}}
         </div>
     </div>
 </div>
-<div class="alert alert-danger" ng-if="!vm.media.id">Impossible d'afficher les détails de ce media</div>
+<div class="alert alert-danger" ng-if="!vm.media.id" >Impossible d'afficher les détails de ce media</div>

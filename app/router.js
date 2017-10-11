@@ -13,9 +13,6 @@ angular.module("media-app").config(function($routeProvider) {
             controller: "detailsController",
             controllerAs: 'vm',
             resolve: {
-                //function(navigationService) {
-                //    navigationService.active = "books"
-                //}
             }
         })
         .otherwise({

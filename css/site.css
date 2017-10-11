@@ -1,10 +1,23 @@
 .tag {margin-right:2px;}
-.img-max {max-height: 300px; max-width: 280px;display: inline-block}
+.img-max {max-height: 300px; max-width: 274px;display: inline-block}
 .medias { padding:5px; background-color:  #eee}
-.media {display: inline-block; text-align: center; width: 280px; vertical-align: middle;}
+.media {display: inline-block; text-align: center; width: 280px; vertical-align: middle; padding:3px;}
 .media-details { text-align: center; background-color:  #ddd; padding: 5px; margin: auto; width: 100%; }
 .pagination {text-align: center;}
 .pagination btn {display: inline-block; margin: 2px;}
+.search-form {
+    background-color: #F8F9FA;
+    padding: 15px;
+    border-radius: 0 0 20px 20px;
+    text-align: center;
+    margin-bottom: 10px;
+    border: solid 1px #ddd;
+        border-top-width: 1px;
+        border-top-style: solid;
+        border-top-color: rgb(221, 221, 221);
+    border-top: none;
+    
+}
 
 input[type="range"] {
     width: 80%;
@@ -13,7 +26,7 @@ input[type="range"] {
 }
 .label {cursor: pointer;}
 
-a.supress-tag {color:  #e2babd; font-size: 1.1em}
+a.supress-tag {color:  #e2babd; font-size: 1.1em; cursor: pointer;}
 
 .bottom-media {    
     background-color: rgba(0, 0, 0, 0.83);
@@ -33,3 +46,7 @@ a.supress-tag {color:  #e2babd; font-size: 1.1em}
     border:solid 1px #ddd;
 }
 
+.selected-media {
+    border-radius: 5px;
+    background-color: #0504044d;
+}

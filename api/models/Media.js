@@ -1,11 +1,103 @@
 var db = require('../dbconnection');
 
+function decodeQuery(query) {
+  //let decodedQuery = unescape(query);
+  let decodedQuery = '';
+  let query_parts = query.split('&');
+  for (let i=0; i<query_parts.length; i++) {
+    let part = query_parts[i];
+    let partSplit = part.split('=');
+    if (partSplit.length != 2) return '';
+    let type = partSplit[0];
+    let args = partSplit[1].split(',');
+    switch (type) {
+      case 'tags' :
+        decodedQuery += (decodedQuery.length != 0) ? ' AND (' : '(';
+        for (let i = 0; i < args.length; i++) {
+          if (i != 0 && i != args.length) 
+            decodedQuery += ' AND ';
+          decodedQuery += `mtags.tags LIKE '%`+args[i]+`%'`;
+        }
+        decodedQuery += ')';
+        break;
+      case 'type' :
+        decodedQuery += (decodedQuery.length != 0) ? ' AND (' : '(';
+        for (let i = 0; i < args.length; i++) {
+          if (i != 0 && i != args.length) 
+            decodedQuery += ' OR ';
+          decodedQuery += `medias.type ='`+args[i]+`'`;
+        }
+        decodedQuery += ')';
+        break;
+    }
+  }
+  return decodedQuery;
+}
+
 var Media = {
-  getAllMedias: function(callback) {
-    return db.query("SELECT medias.id, medias.path, medias.type, medias.libelle as libelle, medias.ratings, tags.libelle as tag FROM medias left outer join medias_tags on medias.id = medias_tags.id_media left outer join tags on tags.id = medias_tags.id_tag;", callback);
+  getMediasCount : function(query, callback) {
+    console.log(query);
+    let addquery = decodeQuery(query); 
+    console.log(addquery);
+    let sql = `select 
+                count(medias.id) as nbMedias
+              from medias 
+              left outer join 
+              (
+                select id_media, group_concat(tags.libelle order by tags.libelle) as tags
+                from medias_tags
+                join tags on tags.id = medias_tags.id_tag
+                group by id_media
+              ) mtags on mtags.id_media = medias.id`   
+    if(addquery) {
+      sql += ' WHERE ' + addquery;
+    }
+    console.log(sql);
+    return db.query(sql, callback);
+  },
+  getMedias: function(query, limit, offset, callback) {
+    let addquery = decodeQuery(query); 
+    let sql = `select 
+                medias.id, 
+                medias.path, 
+                medias.type, 
+                medias.libelle, 
+                medias.ratings,
+                mtags.tags
+              from medias 
+              left outer join 
+              (
+                select id_media, group_concat(tags.libelle order by tags.libelle) as tags
+                from medias_tags
+                join tags on tags.id = medias_tags.id_tag
+                group by id_media
+              ) mtags on mtags.id_media = medias.id`
+              
+    if(addquery) {
+      sql += ' WHERE ' + addquery;
+    }
+    sql += ` order by medias.id limit `+limit+` offset `+offset+`;`
+    console.log(sql);
+    return db.query(sql, callback);
   },
   getMediaById: function(id, callback) {
-    return db.query("SELECT medias.id, medias.path, medias.type, medias.libelle as libelle, medias.ratings, tags.libelle as tag FROM medias left outer join medias_tags on medias.id = medias_tags.id_media left outer join tags on tags.id = medias_tags.id_tag WHERE medias.id=?;", [id], callback);
+    return db.query(`select 
+                      medias.id, 
+                      medias.path, 
+                      medias.type, 
+                      medias.libelle, 
+                      medias.ratings,
+                      mtags.tags
+                    from medias 
+                    left outer join 
+                    (
+                      select id_media, group_concat(tags.libelle order by tags.libelle) as tags
+                      from medias_tags
+                      join tags on tags.id = medias_tags.id_tag
+                      group by id_media
+                    ) mtags on mtags.id_media = medias.id
+                    WHERE medias.id = ?`
+    , [id], callback);
   },
   addMedia: function(media, callback) {
     //creating request
@@ -50,28 +142,18 @@ var Media = {
   },
   mapMediaAndTags: function(rows) {
     let medias = [];
-    let newMedia = { id : -1};
     for (let i = 0; i < rows.length; i++) {
       let row = rows[i];
-      if (row.id !== newMedia.id) {
-        if (newMedia.id !== -1) {
-          medias.push(newMedia);
-        }
-        newMedia = {
-          id:row.id,
-          path: row.path,
-          type: row.type,
-          libelle: row.libelle,
-          ratings: row.ratings,
-          tags: []
-        };
-      }
-      newMedia.tags.push(row.tag);
+      medias.push({
+        id:row.id,
+        path: row.path,
+        type: row.type,
+        libelle: row.libelle,
+        ratings: row.ratings,
+        tags: row.tags ? row.tags.split(',') : []
+      });
     }
-    if (newMedia.id !== -1) {
-      medias.push(newMedia);
-    }
-    return medias.length === 1 ? medias[0] : medias;
+    return medias;
   },
   mapTagsArray: function(rows) {
     let tags = [];

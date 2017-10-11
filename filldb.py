@@ -13,15 +13,15 @@ if __name__ == "__main__":
 
   # On parcourt les fichiers
   included_extenstions = ['.jpg', '.bmp', '.png', '.gif', '.jpeg']
-  for root, dirnames, filenames in os.walk('mock'):
+  for root, dirnames, filenames in os.walk('media'):
       for filename in fnmatch.filter(filenames, '*'):
           if any(filename.lower().endswith(ext) for ext in included_extenstions):
             media_path = os.path.join(root, filename)
             media_type = 'GIF' if filename.lower().endswith('gif') else 'PHOTO'
             media_libelle = filename
             media_ratings = '0'
-            sqlQuery = "INSERT INTO medias (path, type, libelle, ratings) VALUES ('"+media_path+"','"+media_type+"','"+media_libelle+"','"+media_ratings+"');"
-            print(sqlQuery)
+            sqlQuery = "INSERT IGNORE INTO medias (path, type, libelle, ratings) VALUES ('"+media_path+"','"+media_type+"','"+media_libelle+"','"+media_ratings+"');"
+            print('INSERTING ' + os.path.join(root, filename))
             cursor.execute(sqlQuery)
             db.commit()
           else: #TODO : videos : create mp4
