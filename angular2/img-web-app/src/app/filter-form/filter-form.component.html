@@ -1,0 +1,10 @@
+<mat-card class="filterForm">
+  <h2 class="example-h2">Filtering</h2>
+  <mat-form-field class="search-full-width">
+    <input matInput placeholder="tag1, tag2..." [(ngModel)]="filterTags" (keyup.enter)="updateQuery()" type="text"/>
+  </mat-form-field>
+  <mat-checkbox [(ngModel)]="filterPhoto" (ngModelChange)="updateQuery()">Photo</mat-checkbox>
+  <mat-checkbox [(ngModel)]="filterGif" (ngModelChange)="updateQuery()">Gif</mat-checkbox>   
+  <br />
+  <pager [size]="mediaSize" [selected]="selectedPage"></pager>
+</mat-card>

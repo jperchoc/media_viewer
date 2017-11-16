@@ -1,0 +1,11 @@
+<mat-card class="media-card">
+  <mat-card-header>
+      <mat-card-title>{{media.libelle}}</mat-card-title>
+    </mat-card-header>
+    <img mat-card-image src="assets/{{media.path}}">
+    <mat-card-footer>
+      <mat-chip-list>
+        <mat-chip *ngFor="let tag of media.tags">{{tag}}</mat-chip>
+      </mat-chip-list>
+    </mat-card-footer>
+</mat-card>

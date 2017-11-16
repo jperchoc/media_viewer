@@ -71,12 +71,13 @@ var Media = {
                 from medias_tags
                 join tags on tags.id = medias_tags.id_tag
                 group by id_media
-              ) mtags on mtags.id_media = medias.id`
+              ) mtags on mtags.id_media = medias.id `
               
     if(addquery) {
-      sql += ' WHERE ' + addquery;
+      sql += 'WHERE ' + addquery;
     }
-    sql += ` order by medias.id limit `+limit+` offset `+offset+`;`
+    sql += `ORDER BY medias.path ` //CHAR_LENGTH(mtags.tags) `//` order by medias.id `
+    sql += `limit ` + limit + ` offset ` + offset+`;`
     console.log(sql);
     return db.query(sql, callback);
   },
