@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Input, Output, EventEmitter } from '@angular/core';
 import { Media } from '../models/media';
 
 @Component({
@@ -8,7 +8,7 @@ import { Media } from '../models/media';
   encapsulation: ViewEncapsulation.None
 })
 export class MediaCardComponent implements OnInit {
-
+  
   constructor() { }
   @Input() media : Media;
 

@@ -12,6 +12,7 @@ import { MediaGridComponent } from './media-grid/media-grid.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { PagerComponent } from './pager/pager.component';
 import { DebounceDirective } from './debounce/debounce.directive';
+import { ModalMediaComponent } from './modal-media/modal-media.component';
 
 
 
@@ -23,7 +24,8 @@ import { DebounceDirective } from './debounce/debounce.directive';
     MediaGridComponent,
     ToolbarComponent,
     PagerComponent,
-    DebounceDirective
+    DebounceDirective,
+    ModalMediaComponent
   ],
   imports: [
     BrowserModule,
@@ -31,6 +33,9 @@ import { DebounceDirective } from './debounce/debounce.directive';
     FormsModule,
     HttpModule,
     AppMaterialModule
+  ],
+  entryComponents: [
+    ModalMediaComponent
   ],
   providers: [],
   bootstrap: [AppComponent]
