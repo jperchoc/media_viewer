@@ -14,6 +14,8 @@ import { ModalMediaComponent } from './modal-media/modal-media.component';
 })
 export class AppComponent {
   medias: Array<Media>;
+
+  page: number = 1;
   
   constructor(private http:Http, public dialog: MatDialog) {
    }
@@ -33,8 +35,14 @@ export class AppComponent {
       if (index !== -1) {
         if (res.key === "ArrowLeft" && index !== 0) {
           dialogRef.componentInstance.data = this.medias[index - 1];
-        } else if(res.key === "ArrowRight" && index != this.medias.length -1) {
-          dialogRef.componentInstance.data = this.medias[index + 1];
+        } else if(res.key === "ArrowRight") {
+          if (index != this.medias.length -1) {
+            dialogRef.componentInstance.data = this.medias[index + 1];
+          } else {
+            console.log('next page');
+            this.page++;
+            dialogRef.componentInstance.data = this.medias[0];
+          }
         }
       }
     });

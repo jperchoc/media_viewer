@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Output, EventEmitter, ViewChild, Input, SimpleChanges } from '@angular/core';
 import { Http } from '@angular/http';
 import { Constants } from '../models/constants';
 import { Query } from '../models/query';
@@ -12,13 +12,21 @@ import { QueryChangedEventData } from '../models/queryChangedEventData';
 })
 export class FilterFormComponent implements OnInit {
 
+  @Input() selectedPage: number;
+  @Output() selectedPageChange: EventEmitter<number> = new EventEmitter<any>();
+
   filterPhoto: boolean = true;
   filterGif: boolean = true;
   filterTags: string = '';
   mediaSize: number = 0;
-  selectedPage: number = 1;
+  
   @Output() querychanged:EventEmitter<QueryChangedEventData> = new EventEmitter();
 
+  changePage() {
+    console.log("changed page");
+    this.updateQuery();
+    this.selectedPageChange.emit(this.selectedPage);
+  }
   updateQuery() {
     let query = new Query;
     query.showGifs = this.filterGif;
@@ -43,6 +51,10 @@ export class FilterFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.updateQuery();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
     this.updateQuery();
   }
 }

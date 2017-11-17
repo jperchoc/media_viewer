@@ -8,6 +8,6 @@
   </mat-form-field>
   <mat-checkbox [(ngModel)]="filterPhoto" (ngModelChange)="updateQuery()">Photo</mat-checkbox>
   <mat-checkbox [(ngModel)]="filterGif" (ngModelChange)="updateQuery()">Gif</mat-checkbox>   
-  <pager [size]="mediaSize" [(selected)]="selectedPage" (selectedChange)="updateQuery()"></pager>
+  <pager [size]="mediaSize" [(selected)]="selectedPage" (selectedChange)="changePage()"></pager>
 </mat-expansion-panel>
 <br/>
