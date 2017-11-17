@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
+import { Constants } from './models/constants';
+import { Media } from './models/media';
+import { QueryChangedEventData } from './models/queryChangedEventData';
 
 @Component({
   selector: 'app-root',
@@ -8,13 +11,13 @@ import 'rxjs/add/operator/map';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  myData: Array<any>;
+  medias: Array<Media>;
   
   constructor(private http:Http) { }
 
-  getMedias(event:any) {
-    this.http.get('http://localhost:3000/medias/query/' + event.query)
+  getMedias(event:QueryChangedEventData) {
+    this.http.get(Constants.API_URL + '/medias/query/' + event.query.getStringQuery(true))
     .map(response => response.json())
-    .subscribe(res => this.myData = res);
+    .subscribe(res => this.medias = res);
   }
 }

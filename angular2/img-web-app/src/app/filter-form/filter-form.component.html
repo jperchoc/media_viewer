@@ -1,10 +1,13 @@
-<mat-card class="filterForm">
-  <h2 class="example-h2">Filtering</h2>
+<mat-expansion-panel class="filterForm">
+  <mat-expansion-panel-header>
+    <mat-panel-title>Filtering</mat-panel-title>
+  </mat-expansion-panel-header>
+
   <mat-form-field class="search-full-width">
-    <input matInput placeholder="tag1, tag2..." [(ngModel)]="filterTags" (keyup.enter)="updateQuery()" type="text"/>
+    <input matInput placeholder="Tags" [(ngModel)]="filterTags" [debounce]="500" (onDebounce)="updateQuery()" (keyup.enter)="updateQuery()" type="text"/>
   </mat-form-field>
   <mat-checkbox [(ngModel)]="filterPhoto" (ngModelChange)="updateQuery()">Photo</mat-checkbox>
   <mat-checkbox [(ngModel)]="filterGif" (ngModelChange)="updateQuery()">Gif</mat-checkbox>   
-  <br />
-  <pager [size]="mediaSize" [selected]="selectedPage"></pager>
-</mat-card>
+  <pager [size]="mediaSize" [(selected)]="selectedPage" (selectedChange)="updateQuery()"></pager>
+</mat-expansion-panel>
+<br/>

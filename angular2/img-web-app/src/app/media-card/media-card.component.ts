@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
+import { Media } from '../models/media';
 
 @Component({
   selector: 'media-card',
@@ -9,7 +10,7 @@ import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
 export class MediaCardComponent implements OnInit {
 
   constructor() { }
-  @Input() media : any;
+  @Input() media : Media;
 
   ngOnInit() {
   }

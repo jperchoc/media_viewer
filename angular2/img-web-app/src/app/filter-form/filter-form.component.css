@@ -4,3 +4,6 @@
 .filterForm {
   margin-bottom: 10px;
 }
+.clean {
+  clear: both;
+}

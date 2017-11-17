@@ -1,7 +1,7 @@
 .media-card {
   width:250px;
   margin: 2px;
-  display: inline-block;
+  display: inline-block!important;
   vertical-align: top;
 }
 

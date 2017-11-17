@@ -2,9 +2,9 @@
 
 <section class="main-content">
   <filter-form (querychanged)="getMedias($event)"></filter-form>
-  <p *ngIf="!myData || myData.length === 0; else mediaTemplate">No media found...</p>
+  <p *ngIf="!medias || medias.length === 0; else mediaTemplate">No media found...</p>
 
   <ng-template #mediaTemplate>
-    <media-grid [medias]="myData.slice(0, 20)" [cols]="4"></media-grid>
+    <media-grid [medias]="medias" [cols]="4"></media-grid>
   </ng-template>
 </section>

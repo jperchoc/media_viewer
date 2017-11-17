@@ -1,5 +1,8 @@
-import { Component, OnInit, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Http } from '@angular/http';
+import { Constants } from '../models/constants';
+import { Query } from '../models/query';
+import { QueryChangedEventData } from '../models/queryChangedEventData';
 
 @Component({
   selector: 'filter-form',
@@ -13,36 +16,33 @@ export class FilterFormComponent implements OnInit {
   filterGif: boolean = true;
   filterTags: string = '';
   mediaSize: number = 0;
-  selectedPage: number = 0;
-
-  @Output() querychanged:EventEmitter<any> = new EventEmitter();
+  selectedPage: number = 1;
+  @Output() querychanged:EventEmitter<QueryChangedEventData> = new EventEmitter();
 
   updateQuery() {
-    let query: string;
-    query = 'type=';
-    if (this.filterPhoto) query += (query[query.length -1] !== '=') ? ',photo' : 'photo';
-    if (this.filterGif) query += (query[query.length -1] !== '=') ? ',gif' : 'gif';
-    if (this.filterTags.length !== 0) {
-      query += '&tags='
-      let tags = this.filterTags.split(',')
-      for (let i = 0; i < tags.length; i++) {
-        query += (i !== tags.length - 1) ? tags[i].trim() + ',' : tags[i].trim();
-      }
-    }
-    //http://localhost:3000/medias/query/type=photo,gif/count
-    this.http.get('http://localhost:3000/medias/query/' + query + '/count')
+    let query = new Query;
+    query.showGifs = this.filterGif;
+    query.showImages = this.filterPhoto;
+    query.showVideos = false;
+    query.setTags(this.filterTags.split(','));
+    query.limit = Constants.ITEMS_PER_PAGE;
+    query.offset = query.limit * (this.selectedPage - 1);
+    this.http.get(Constants.API_URL + '/medias/query/' + query.getStringQuery(false) + '/count')
     .map(response => response.json())
     .subscribe(res => {
       this.mediaSize = res[0].nbMedias;
-      let eventData = {query:query, size: this.mediaSize }
+      let eventData: QueryChangedEventData = {
+        query:query,
+        size: this.mediaSize 
+      }
       this.querychanged.emit(eventData);
     });
   }
 
-  constructor(private http:Http) { }
+  constructor(private http:Http) { 
+  }
 
   ngOnInit() {
     this.updateQuery();
   }
-
 }

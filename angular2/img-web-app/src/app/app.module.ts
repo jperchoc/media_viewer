@@ -11,6 +11,8 @@ import { MediaCardComponent } from './media-card/media-card.component';
 import { MediaGridComponent } from './media-grid/media-grid.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { PagerComponent } from './pager/pager.component';
+import { DebounceDirective } from './debounce/debounce.directive';
+
 
 
 @NgModule({
@@ -20,7 +22,8 @@ import { PagerComponent } from './pager/pager.component';
     MediaCardComponent,
     MediaGridComponent,
     ToolbarComponent,
-    PagerComponent
+    PagerComponent,
+    DebounceDirective
   ],
   imports: [
     BrowserModule,
