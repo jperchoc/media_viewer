@@ -1,6 +1,10 @@
 <h2 mat-dialog-title>{{data.libelle}}</h2>
 <mat-dialog-content>
   <img mat-card-image src="assets/{{data.path}}">
+  <mat-chip-list>
+      <mat-chip *ngFor="let tag of data.tags">{{tag}}</mat-chip>
+  </mat-chip-list>
+  <br/>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button [mat-dialog-close]="true">Install</button>

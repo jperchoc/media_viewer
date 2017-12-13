@@ -4,7 +4,7 @@ export class Query {
   private tags: Array<string> = [];
   showImages: boolean;
   showGifs: boolean;
-  showVideos:boolean;
+  showVideos: boolean;
   offset: number;
   limit: number = Constants.ITEMS_PER_PAGE;
 

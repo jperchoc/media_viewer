@@ -1,7 +1,7 @@
 import { MediaType } from "./mediaType";
 
 export class Media {
-  id:number;
+  id: number;
   path: string;
   type: MediaType;
   libelle: string;
